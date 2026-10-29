@@ -1,0 +1,20 @@
+{
+  "name": "jincy7-tools",
+  "interface": {
+    "displayName": "Jincy7 Tools"
+  },
+  "plugins": [
+    {
+      "name": "task-harness",
+      "source": {
+        "source": "local",
+        "path": "./plugins/task-harness"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

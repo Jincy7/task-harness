@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic request flow</title>
+  <desc id="desc">Input goes through validation to a result. This standalone SVG is the editable source.</desc>
+  <rect width="720" height="180" fill="#fafaf8"/>
+  <g fill="#ffffff" stroke="#30433b" stroke-width="2">
+    <rect x="30" y="55" width="170" height="70" rx="10"/>
+    <rect x="275" y="55" width="170" height="70" rx="10"/>
+    <rect x="520" y="55" width="170" height="70" rx="10"/>
+    <path d="M200 90 H263 M253 83 L263 90 L253 97 M445 90 H508 M498 83 L508 90 L498 97" fill="none"/>
+  </g>
+  <g fill="#20372b" font-family="sans-serif" font-size="20" text-anchor="middle">
+    <text x="115" y="97">Input</text>
+    <text x="360" y="97">Validate</text>
+    <text x="605" y="97">Result</text>
+  </g>
+</svg>
