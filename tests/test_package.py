@@ -9,7 +9,9 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins/task-harness"
-NAMES = {"task-scope", "task-build", "task-verify", "task-docs", "task-agents"}
+WORKFLOW_NAMES = {"task-scope", "task-build", "task-verify", "task-docs", "task-agents"}
+PRACTICE_NAMES = {"python-best-practices", "react-best-practices"}
+NAMES = WORKFLOW_NAMES | PRACTICE_NAMES
 
 
 class PackageTests(unittest.TestCase):
@@ -27,7 +29,7 @@ class PackageTests(unittest.TestCase):
         self.assertRegex(manifest["version"], r"^\d+\.\d+\.\d+$")
         self.assertEqual(set(manifest) - {"$schema", "name", "version", "description", "license"}, set())
 
-    def test_five_explicit_skills(self):
+    def test_skill_inventory_and_invocation_policies(self):
         self.assertEqual({p.name for p in (PLUGIN / "skills").iterdir()}, NAMES)
         for name in NAMES:
             with self.subTest(skill=name):
@@ -38,7 +40,8 @@ class PackageTests(unittest.TestCase):
                 self.assertIn(f"name: {name}\n", frontmatter)
                 self.assertRegex(frontmatter, r"\ndescription: .+")
                 policy = (directory / "agents/openai.yaml").read_text()
-                self.assertRegex(policy, r"policy:\s*\n  allow_implicit_invocation: false\s*$")
+                expected = "false" if name in WORKFLOW_NAMES else "true"
+                self.assertRegex(policy, rf"policy:\s*\n  allow_implicit_invocation: {expected}\s*$")
 
     def test_each_copied_skill_has_all_its_references(self):
         for name in NAMES:
@@ -47,7 +50,10 @@ class PackageTests(unittest.TestCase):
                 shutil.copytree(PLUGIN / "skills" / name, directory)
                 for doc in directory.rglob("*.md"):
                     for link in re.findall(r"\]\(([^)]+)\)", doc.read_text()):
-                        self.assertNotIn("://", link, "Skills must not need remote references")
+                        if "://" in link:
+                            self.assertTrue(link.startswith("https://"), link)
+                            self.assertIn(doc.parent.name, {"references"}, "Entrypoints must use local guidance")
+                            continue
                         path = (doc.parent / link.split("#")[0]).resolve()
                         self.assertTrue(path.is_relative_to(directory), link)
                         self.assertTrue(path.is_file(), link)
@@ -64,8 +70,8 @@ class PackageTests(unittest.TestCase):
                 self.assertNotIn(path.name, {"mcp.json", "hooks.json"})
                 self.assertNotRegex(path.read_text(), r"시험|응시|예선|skhynix|mail\.google\.com")
 
-    def test_readme_local_links_resolve(self):
-        text = (ROOT / "README.md").read_text()
+    def test_entrypoint_local_links_resolve(self):
+        text = "\n".join((ROOT / name).read_text() for name in ("README.md", "AGENTS.md"))
         for link in re.findall(r"\]\(([^)]+)\)", text):
             if "://" not in link and not link.startswith("#"):
                 self.assertTrue((ROOT / link.split("#")[0]).is_file(), link)

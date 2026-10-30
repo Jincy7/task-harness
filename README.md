@@ -1,10 +1,10 @@
 # Task Harness
 
-작업을 분해하고 구현 과정을 정형화하기 위한 개인용 경량 하네스입니다. Codex에서 범위 결정, 구현, 검증, 문서 정비, 저장소 지침 관리를 다섯 스킬로 호출합니다. 같은 정보의 원본은 한 곳에 두고 문서를 연결합니다.
+작업을 분해하고 구현 과정을 정형화하기 위한 개인용 경량 하네스입니다. Codex에서 범위 결정, 구현, 검증, 문서 정비, 저장소 지침 관리를 작업 스킬 5개로 호출하고, Python과 React 구현에는 기술 스킬 2개를 사용합니다. 같은 정보의 원본은 한 곳에 두고 문서를 연결합니다.
 
 첫 사용자 흐름의 수용 조건이 정해지면 구현을 시작합니다. 전체 스펙 완성을 기다리지 않고, 구현 중 발견한 요구는 다음 작업에 반영합니다.
 
-## 다섯 스킬
+## 일곱 스킬
 
 | 호출 | 역할 | 종료 조건 |
 | --- | --- | --- |
@@ -12,9 +12,11 @@
 | `$task-build` | 작업 계약 작성, 구현, 주요 경계 검증 | 실행되는 흐름과 수용 조건의 검증 근거 확보 |
 | `$task-verify` | 수용 조건별 구현 위치와 실제 관측 대조 | 통과, 실패, 미확인과 다음 행동 정리 |
 | `$task-docs` | 문서 지도, 스펙, 플랜, ADR, 다이어그램 정비 | 현재 작업의 정보별 원본과 연결 확인 |
-| `$task-agents` | 근거에 따른 짧은 `AGENTS.md` 생성과 갱신 | 기존 규칙 보존, 경로와 명령의 확인 상태 기록 |
+| `$task-agents` | 문서 작성 규칙과 스킬 사용 시점을 담은 룰북 지도 | 기존 규칙 보존, 실제 문서와 스킬 연결 |
+| `$python-best-practices` | Python 입력, 저장, 예외, 자원과 동시성 검토 | 변경 경계에 맞는 구현 또는 검토 근거 |
+| `$react-best-practices` | React 상태, Effect, 폼과 사용자 조작 검토 | 변경한 화면 흐름의 구현 또는 검토 근거 |
 
-스킬은 명시적으로 호출할 때 사용합니다. 단계마다 모두 호출할 필요는 없습니다. 확정된 작은 수정은 바로 `$task-build`로 시작할 수 있습니다. 각 스킬은 개별 설치해도 동작합니다.
+작업 스킬 5개는 명시적으로 호출할 때 사용합니다. Python과 React 스킬은 해당 코드를 작성하거나 검토할 때 자동 선택을 허용하며, 명시적으로도 호출할 수 있습니다. 단계마다 모두 호출할 필요는 없습니다. 확정된 작은 수정은 바로 `$task-build`로 시작할 수 있습니다. 각 스킬은 개별 설치해도 동작합니다.
 
 ## 설치
 
@@ -39,7 +41,7 @@ codex plugin list --marketplace jincy7-tools --json
 
 ### 프로젝트 스킬로 복사
 
-플러그인 기능이 없고 프로젝트 스킬 로딩을 지원하는 환경에서는 다섯 디렉터리를 대상 프로젝트의 `.agents/skills/`로 복사합니다. 스킬의 참조 파일은 모두 각 디렉터리 안에 있습니다.
+플러그인 기능이 없고 프로젝트 스킬 로딩을 지원하는 환경에서는 일곱 디렉터리를 대상 프로젝트의 `.agents/skills/`로 복사합니다. 스킬의 참조 파일은 모두 각 디렉터리 안에 있습니다.
 
 저장소 루트에서 다음을 실행합니다. `TARGET_PROJECT`는 실제 대상 프로젝트 경로로 바꿉니다. 같은 이름의 파일이나 링크가 있으면 복사를 중단합니다.
 
@@ -48,7 +50,7 @@ TARGET_PROJECT=/absolute/path/to/project
 (
   set -eu
   test -d "$TARGET_PROJECT"
-  for skill in task-scope task-build task-verify task-docs task-agents; do
+  for skill in task-scope task-build task-verify task-docs task-agents python-best-practices react-best-practices; do
     destination="$TARGET_PROJECT/.agents/skills/$skill"
     if [ -e "$destination" ] || [ -L "$destination" ]; then
       echo "Already exists: $destination" >&2
@@ -56,7 +58,7 @@ TARGET_PROJECT=/absolute/path/to/project
     fi
   done
   mkdir -p "$TARGET_PROJECT/.agents/skills"
-  for skill in task-scope task-build task-verify task-docs task-agents; do
+  for skill in task-scope task-build task-verify task-docs task-agents python-best-practices react-best-practices; do
     cp -R "plugins/task-harness/skills/$skill" "$TARGET_PROJECT/.agents/skills/"
   done
 )
@@ -98,7 +100,18 @@ $task-verify
 ```text
 $task-docs $task-agents
 기존 지침과 문서 경로를 보존하면서 현재 작업의 docs와 AGENTS.md를 정리해줘.
-문서만 작성하고, 설정에서 확인한 명령과 실제 실행 결과를 구분해줘.
+AGENTS.md에는 문서 작성 규칙과 스킬 사용 시점만 연결해줘.
+진행 상태와 검증 결과는 기존 플랜이나 작업 장부에 남겨줘.
+```
+
+```text
+$task-build $python-best-practices
+이 Python 저장 흐름을 구현하고 입력 검증, 롤백과 재시도를 확인해줘.
+```
+
+```text
+$react-best-practices
+이 React 검색 화면을 검토만 해줘. 상태 소유권, 늦은 응답과 입력값 보존을 확인해줘.
 ```
 
 문서만 요청하면 제품 구현을 시작하지 않습니다. 문서와 구현을 함께 요청하면 첫 흐름의 수용 조건이 정해지는 즉시 구현으로 이어갑니다.
@@ -109,7 +122,7 @@ $task-docs $task-agents
 
 | 경로 | 정보의 원본 |
 | --- | --- |
-| `AGENTS.md` | 작업 지침, 확인한 명령, 탐색 경로 |
+| `AGENTS.md` | 문서 작성 규칙과 스킬 선택 지도 |
 | `docs/README.md` | 현재 작업의 문서 지도 |
 | `docs/specs/<topic>.md` | 기대 동작, 범위, 수용 조건, 미결사항과 가정 |
 | `docs/plans/<topic>.md` | 구현 순서, 작업 담당과 상태, 경계, 검증 근거 |
@@ -118,7 +131,7 @@ $task-docs $task-agents
 
 기존 `docs/spec`, `docs/plan`, `WORK.md`나 별도 작업 장부는 보존합니다. 플랜은 요구 ID로 스펙을 참조하고, 기존 장부가 있으면 연결합니다. 같은 상태표를 두 곳에 만들거나 기존 기록을 자동 이관하지 않습니다. ADR과 다이어그램은 필요할 때만 추가합니다.
 
-`AGENTS.md`는 실제 확인한 경로와 명령만 기록합니다. 설정 확인, 실행 성공, 실행 실패, 미확인을 구분하고 기존 override와 적용 범위를 확인합니다.
+`AGENTS.md`에는 문서를 어떻게 쓰고 언제 무슨 스킬을 읽을지 연결합니다. 실행 방법은 README, 진행 상태와 검증 결과는 플랜이나 기존 장부에서 관리합니다. 기존 사용자 규칙과 override의 적용 범위는 보존합니다. 새로 생성하는 지침에는 구현 여부나 테스트 부재 목록을 넣지 않습니다.
 
 - [문서 템플릿](plugins/task-harness/skills/task-docs/references/document-templates.md)
 - [저장소 지침 템플릿](plugins/task-harness/skills/task-agents/references/agents-template.md)
@@ -145,24 +158,23 @@ $task-docs $task-agents
 python3 -m unittest discover -s tests -v
 ```
 
-검사 범위는 카탈로그 경로와 매니페스트 연결, 다섯 스킬의 명시 호출 정책, 개별 복사 후 참조 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 정적 검사만으로 에이전트의 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
+검사 범위는 카탈로그와 매니페스트 연결, 일곱 스킬의 호출 정책, 개별 복사 후 로컬 참조 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 공식 출처 링크는 선택 참고 자료이며 실제 지침은 스킬 안에 포함합니다. 정적 검사만으로 에이전트 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
 
-2026-10-30에 macOS, Python 3.14.0, Codex CLI 0.165.0에서 확인했습니다. 다른 버전의 호환성은 별도 확인이 필요합니다.
+### 검증 이력
 
-| 항목 | 상태 | 근거 |
-| --- | --- | --- |
-| 로컬 CLI와 플러그인 명령 | 확인 | `codex-cli 0.165.0`, `codex plugin --help` |
-| 패키지 검사 | 통과 | 표준 라이브러리 검사 6개 통과, 개별 복사 후 참조 확인 |
-| 스킬 형식 검사 | 통과 | `skill-creator`의 `quick_validate.py`로 다섯 스킬 확인 |
-| 임시 환경의 플러그인 설치 | 통과 | 마켓플레이스 등록, `0.2.0` 설치, `installed: true`, `enabled: true`, 다섯 스킬 캐시 확인 |
-| 기존 세 스킬의 동작 시나리오 | 확인 | 질문 종료, 검증 실행 실패, 순차 작업, 범위 결정만 요청, 검토만 요청의 모의 검사 |
-| 문서 스킬의 합성 저장소 검사 | 확인 | 문서 3개만 생성 또는 갱신, 기존 경로와 사용자 규칙 보존, 명령 미실행 명시, 장부 중복 없음 |
-| 다이어그램과 ADR 변경 상황 | 모의 확인 | 오래된 SVG의 갱신 필요 표시, ADR 대체 관계와 스펙 갱신 |
-| SVG 예시 표시 | 확인 | macOS Quick Look 렌더링 후 글자와 연결선, 잘림 확인 |
-| 실제 UI에서 스킬 선택과 새 대화 호출 | 미확인 | 직접 확인 필요 |
-| 원격 커밋 설치와 공개 디렉터리 게시 | 미실행 | 로컬 구축 범위 |
+`0.2.0`은 2026-10-30에 macOS, Python 3.14.0, Codex CLI 0.165.0에서 패키지 검사 6개와 스킬 형식 검사를 통과했습니다.
+임시 환경과 사용자 환경의 플러그인 설치, 원격 커밋 설치를 확인했습니다.
+Docker의 실제 세션에서는 agents, scope, build, docs 호출을 관측했고 생성 앱의 테스트 5개와 독립 CLI 사례 30개를 복사본에서 통과했습니다.
+별도 verify 호출과 실제 브라우저 흐름은 확인하지 않았습니다.
 
-설치 검증은 인증과 사용자 설정을 복사하지 않은 임시 Codex 상태 경로에서 수행했습니다. 실제 사용자 설정에는 설치하지 않았습니다. 동작 검사는 독립 에이전트의 모의 응답과 합성 저장소 문서 작업으로 구분합니다. 대상 앱 구현이나 UI 명시 호출을 실행한 검사는 아닙니다. 작업 시간 절약 효과는 측정하지 않았습니다.
+`0.3.0`은 2026-10-30에 패키지 검사 6개와 스킬 7개의 형식 검사를 통과했습니다. 독립 에이전트의 합성 저장소 작업에서 기존 사용자 규칙 보존, 상태 기록 분리와 지도 링크 12개를 확인했습니다.
+Python 검토 예제에서는 실제 SQLite로 거짓 성공과 입력 검증 결함을 재현했습니다. React 검토 예제에서는 query 의존성 누락과 index key에 따른 편집 상태 문제를 코드로 확인했습니다. 두 검토 모두 대상 소스를 수정하지 않았습니다.
+React 실행과 브라우저 검증, 새 세션에서 기술 스킬의 자동 선택은 확인하지 않았습니다. 이 검토는 합성 예제의 동작 확인이며 실제 프로젝트 전반의 품질 보장은 아닙니다.
+
+## 참고 자료
+
+[Python 스킬 구성 참고](https://github.com/cisco-open/ai-harness-toolkit/tree/main/skills/python-best-practices)의 짧은 진입점과 관심사별 참조 구조를 참고했습니다.
+본문의 지침은 이 하네스에 맞게 새로 작성했으며 해당 저장소의 스킬 원문을 배포물에 복사하지 않았습니다. Python과 React 공식 근거는 각 기술 스킬의 참조 문서에서 연결합니다.
 
 형식 참고: [공식 플러그인 패키징 문서](https://developers.openai.com/plugins/build/plugins), [공식 스킬 문서](https://learn.chatgpt.com/docs/build-skills), [공식 AGENTS.md 지침](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 실제 지원 범위는 사용 중인 Codex에서 확인합니다.
