@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins/task-harness"
-WORKFLOW_NAMES = {"task-scope", "task-build", "task-verify", "task-docs", "task-agents"}
+WORKFLOW_NAMES = {"task-scope", "task-build", "task-verify", "task-docs", "task-agents", "task-understand"}
 PRACTICE_NAMES = {"python-best-practices", "react-best-practices"}
 NAMES = WORKFLOW_NAMES | PRACTICE_NAMES
 

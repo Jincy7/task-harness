@@ -1,22 +1,23 @@
 # Task Harness
 
-작업을 분해하고 구현 과정을 정형화하기 위한 개인용 경량 하네스입니다. Codex에서 범위 결정, 구현, 검증, 문서 정비, 저장소 지침 관리를 작업 스킬 5개로 호출하고, Python과 React 구현에는 기술 스킬 2개를 사용합니다. 같은 정보의 원본은 한 곳에 두고 문서를 연결합니다.
+작업을 분해하고 구현 과정을 정형화하기 위한 개인용 경량 하네스입니다. Codex에서 범위 결정, 구현, 검증, 이해 확인, 문서 정비, 저장소 지침 관리를 작업 스킬 6개로 호출하고, Python과 React 구현에는 기술 스킬 2개를 사용합니다. 같은 정보의 원본은 한 곳에 두고 문서를 연결합니다.
 
 사용자의 행동 순서와 상태 변화가 기대대로 동작하는지 실행 근거로 검증하는 것이 관측 가능성을 챙기는 목적입니다. 첫 사용자 흐름의 수용 조건이 정해지면 구현을 시작합니다. 전체 스펙 완성을 기다리지 않고, 구현 중 발견한 요구는 다음 작업에 반영합니다.
 
-## 일곱 스킬
+## 여덟 스킬
 
 | 호출 | 역할 | 종료 조건 |
 | --- | --- | --- |
 | `$task-scope` | 질문 선별, 흐름별 작업 분해, 가정과 제외 범위 결정 | 사용자 행동, 성공 결과, 입력과 상태 변화, 실패 처리 확정 |
 | `$task-build` | 실행 기록 준비, 구현, 주요 경계 검증 | 실행되는 흐름과 수용 조건의 검증 근거 확보 |
 | `$task-verify` | 수용 조건별 구현 위치와 실제 관측 대조 | 통과, 실패, 미확인과 다음 행동 정리 |
+| `$task-understand` | 사람 검증 뒤 한 질문씩 이해 확인, 설명과 예제 및 최종 점검 | 선택한 사례의 설명 확인과 남은 항목 정리 |
 | `$task-docs` | 문서 지도, 스펙, 체크리스트, 작업 보고, ADR, 다이어그램 정비 | 현재 작업의 정보별 원본과 연결 확인 |
 | `$task-agents` | 문서 작성 규칙과 스킬 사용 시점을 담은 룰북 지도 | 기존 규칙 보존, 실제 문서와 스킬 연결 |
 | `$python-best-practices` | Python 입력, 저장, 예외, 자원과 동시성 검토 | 변경 경계에 맞는 구현 또는 검토 근거 |
 | `$react-best-practices` | React 상태, Effect, 폼과 사용자 조작 검토 | 변경한 화면 흐름의 구현 또는 검토 근거 |
 
-작업 스킬 5개는 명시적으로 호출할 때 사용합니다. Python과 React 스킬은 해당 코드를 작성하거나 검토할 때 자동 선택을 허용하며, 명시적으로도 호출할 수 있습니다. 단계마다 모두 호출할 필요는 없습니다. 확정된 작은 수정은 바로 `$task-build`로 시작할 수 있습니다. 각 스킬은 개별 설치해도 동작합니다.
+작업 스킬 6개는 명시적으로 호출할 때 사용합니다. Python과 React 스킬은 해당 코드를 작성하거나 검토할 때 자동 선택을 허용하며, 명시적으로도 호출할 수 있습니다. 단계마다 모두 호출할 필요는 없습니다. 확정된 작은 수정은 바로 `$task-build`로 시작할 수 있습니다. 각 스킬은 개별 설치해도 동작합니다.
 
 ## 설치
 
@@ -41,7 +42,7 @@ codex plugin list --marketplace jincy7-tools --json
 
 ### 프로젝트 스킬로 복사
 
-플러그인 기능이 없고 프로젝트 스킬 로딩을 지원하는 환경에서는 일곱 디렉터리를 대상 프로젝트의 `.agents/skills/`로 복사합니다. 스킬의 참조 파일은 모두 각 디렉터리 안에 있습니다.
+플러그인 기능이 없고 프로젝트 스킬 로딩을 지원하는 환경에서는 여덟 디렉터리를 대상 프로젝트의 `.agents/skills/`로 복사합니다. 스킬의 참조 파일은 모두 각 디렉터리 안에 있습니다.
 
 저장소 루트에서 다음을 실행합니다. `TARGET_PROJECT`는 실제 대상 프로젝트 경로로 바꿉니다. 같은 이름의 파일이나 링크가 있으면 복사를 중단합니다.
 
@@ -50,7 +51,7 @@ TARGET_PROJECT=/absolute/path/to/project
 (
   set -eu
   test -d "$TARGET_PROJECT"
-  for skill in task-scope task-build task-verify task-docs task-agents python-best-practices react-best-practices; do
+  for skill in task-scope task-build task-verify task-docs task-agents task-understand python-best-practices react-best-practices; do
     destination="$TARGET_PROJECT/.agents/skills/$skill"
     if [ -e "$destination" ] || [ -L "$destination" ]; then
       echo "Already exists: $destination" >&2
@@ -58,7 +59,7 @@ TARGET_PROJECT=/absolute/path/to/project
     fi
   done
   mkdir -p "$TARGET_PROJECT/.agents/skills"
-  for skill in task-scope task-build task-verify task-docs task-agents python-best-practices react-best-practices; do
+  for skill in task-scope task-build task-verify task-docs task-agents task-understand python-best-practices react-best-practices; do
     cp -R "plugins/task-harness/skills/$skill" "$TARGET_PROJECT/.agents/skills/"
   done
 )
@@ -117,6 +118,24 @@ $react-best-practices
 ```
 
 문서만 요청하면 제품 구현을 시작하지 않습니다. 문서와 구현을 함께 요청하면 첫 흐름의 수용 조건이 정해지는 즉시 구현으로 이어갑니다.
+
+### 웨이브별 이해 확인
+
+```text
+$task-understand
+이번 작업은 웨이브마다 사람 검증을 마친 뒤 이해를 확인해줘.
+질문은 하나씩 하고, 부족하면 설명과 예제를 준 뒤 다른 사례로 확인해줘.
+내가 확인하는 버전을 유지하면서 독립적인 구현과 검증은 이어가고,
+마지막에는 최신 구현의 전체 흐름과 앞서 혼동한 부분을 점검해줘.
+```
+
+플러그인에서 이름에 네임스페이스가 표시되면 `$task-harness:task-understand`로 호출합니다. 이번 웨이브만 확인하거나 최종 점검만 요청할 수도 있습니다.
+작업 스킬의 `allow_implicit_invocation`은 false입니다. 한 번 요청한 웨이브별 확인은 현재 작업에서 유지하므로 매번 재호출할 필요는 없습니다. 관련 없는 작업에서는 자동으로 문답을 시작하지 않습니다.
+
+흐름은 `구현 및 자동 검증 → 준비된 사람 검증 → 질문 → 응답 → 필요한 설명과 예제 → 변형 사례 → 웨이브 정리`입니다. 마지막에는 최신 구현으로 전체 흐름을 다시 확인합니다.
+사람 검증 대기나 실패를 문답 완료로 덮지 않으며 제품 상태와 이해 확인 상태를 분리합니다. 확인 중인 화면, 입력과 코드 버전을 유지하고 독립 작업을 진행합니다. 실행 환경에서 병행할 수 없으면 교대로 수행합니다.
+
+대화 규칙과 선택적 상세 예시는 [task-understand](plugins/task-harness/skills/task-understand/SKILL.md)에서 확인합니다. 문답 원문은 복제하지 않고 기존 작업 보고에 요지와 남은 확인만 기록합니다.
 
 ## 기록과 작업 방식
 
@@ -178,7 +197,7 @@ $react-best-practices
 python3 -m unittest discover -s tests -v
 ```
 
-검사 범위는 카탈로그와 매니페스트 연결, 일곱 스킬의 호출 정책, 개별 복사 후 로컬 참조 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 공식 출처 링크는 선택 참고 자료이며 실제 지침은 스킬 안에 포함합니다. 정적 검사만으로 에이전트 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
+검사 범위는 카탈로그와 매니페스트 연결, 여덟 스킬의 호출 정책, 개별 복사 후 로컬 참조 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 공식 출처 링크는 선택 참고 자료이며 실제 지침은 스킬 안에 포함합니다. 정적 검사만으로 에이전트 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
 
 ### 검증 이력
 
@@ -200,6 +219,10 @@ React 실행과 브라우저 검증, 새 세션에서 기술 스킬의 자동 �
 
 `0.5.0`은 로거 없는 프로젝트의 도구 선택과 행동 패턴에 따른 검증 근거를 명확히 했습니다. 패키지 검사 6개와 스킬 7개의 형식 검사를 통과했습니다.
 독립 에이전트의 합성 상황 3개에서 외부 패키지 선택, 성공 로그와 저장 상태의 불일치, 일부 로그 누락 시 판정 범위 구분을 확인했습니다. 이 검토에서 외부 로깅 패키지 설치나 실제 앱 실행은 수행하지 않았습니다.
+
+`0.6.0`은 명시 호출용 task-understand와 웨이브별 사람 검증 이후의 문답, 최종 점검을 추가합니다. 규칙 정정과 변형 사례, 실패 출력 보존 지침도 보강했습니다.
+2026-10-30에 패키지 검사 6개와 스킬 8개의 형식 검사를 통과했습니다. 독립 에이전트의 합성 문답 사례 7개를 검토하고, 문답의 제품 수정 범위를 명확히 한 뒤 설명 전용 및 종료 사례 2개를 재검증했습니다.
+추가 합성 상황 4개에서 규칙 정정, 외부 검사 실패의 근거 부족, 고정 가중치의 불변 조건, stdout 오류 보존 설계를 확인했습니다. 실제 앱 재실행, 실제 사용자 이해 및 모든 환경의 병행 실행을 검증한 결과는 아닙니다.
 
 ## 참고 자료
 

@@ -19,6 +19,7 @@
 | 요구 정리와 작업 분해 | [task-scope](plugins/task-harness/skills/task-scope/SKILL.md) |
 | 확정된 흐름 구현 | [task-build](plugins/task-harness/skills/task-build/SKILL.md) |
 | 수용 조건과 실제 결과 대조 | [task-verify](plugins/task-harness/skills/task-verify/SKILL.md) |
+| 명시 요청한 웨이브별 이해 확인과 최종 점검 | [task-understand](plugins/task-harness/skills/task-understand/SKILL.md) |
 | 문서 정리 | [task-docs](plugins/task-harness/skills/task-docs/SKILL.md) |
 | 이 지도 정리 | [task-agents](plugins/task-harness/skills/task-agents/SKILL.md) |
 | Python 구현과 검토 | [python-best-practices](plugins/task-harness/skills/python-best-practices/SKILL.md) |
