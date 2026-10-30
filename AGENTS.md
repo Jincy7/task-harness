@@ -6,10 +6,11 @@
 
 - 문서 종류와 기록 위치: [문서 작성 지침](plugins/task-harness/skills/task-docs/SKILL.md)
 - 요구, 계획과 결정 기록의 형식: [문서 템플릿](plugins/task-harness/skills/task-docs/references/document-templates.md)
+- 구현 전 로그 준비: [로컬 실행 기록 지침](plugins/task-harness/skills/task-build/references/runtime-logging.md)
 - 그림의 작성과 검증: [다이어그램 지침](plugins/task-harness/skills/task-docs/references/diagrams.md)
 - 대상 저장소의 룰북 지도 작성: [AGENTS 템플릿](plugins/task-harness/skills/task-agents/references/agents-template.md)
 
-현재 작업에 필요한 문서만 작성합니다. 실행 방법은 README에, 진행 상태와 실제 검증 결과는 플랜이나 기존 장부에 기록합니다. 이 지도에는 구현 현황, 테스트 결과와 환경 상태를 복제하지 않습니다. 기존 사용자 규칙과 경로를 보존하고, 실제 관측과 미확인을 구분합니다.
+현재 작업에 필요한 문서만 작성합니다. 실행 방법은 README에, 플랜에는 작업 체크리스트와 보고서 링크만 둡니다. 실제 결과와 이상 상황의 원인 및 조치는 별도 작업 보고에 기록합니다. 이 지도에는 구현 현황, 테스트 결과와 환경 상태를 복제하지 않습니다. 기존 사용자 규칙과 경로를 보존하고, 실제 관측과 미확인을 구분합니다.
 
 ## 스킬 선택
 

@@ -1,6 +1,6 @@
 ---
 name: task-docs
-description: Use when the user invokes $task-docs to create or update a repository's documentation map, specs, plans, ADRs, or diagrams for the current work.
+description: Use when the user invokes $task-docs to create or update a repository's documentation map, specs, checklists, work reports, ADRs, or diagrams for the current work.
 ---
 
 # Task Docs
@@ -21,13 +21,22 @@ description: Use when the user invokes $task-docs to create or update a reposito
 | --- | --- |
 | `docs/README.md` | 현재 작업과 관련 문서를 찾는 지도 |
 | `docs/specs/<topic>.md` | 기대 동작, 범위, 수용 조건 ID, 질문과 가정 |
-| `docs/plans/<topic>.md` | 현재 흐름의 구현 순서, 작업 담당과 상태, 경계, 검증 근거 |
+| `docs/plans/<topic>.md` | 현재 흐름의 작업 체크리스트와 스펙 및 보고서 링크 |
+| `docs/reports/<topic>/<work-id>.md` | 작업별 변경 결과, 검증 근거, 이상 상황의 원인과 조치 |
 | `docs/adr/0001-<decision>.md` | 중요한 결정과 근거, 대안, 구현, 검증과 한계 |
 | `docs/diagrams/<topic>.*` | 그림이 설명에 도움이 되는 관계 |
 
 `AGENTS.md`는 문서 작성 규칙과 스킬 사용 시점을 연결하는 지도로 유지합니다. 구현 현황, 명령 목록과 테스트 결과는 이 지도에 복제하지 않습니다.
 
-각 정보의 원본은 한 곳에 둡니다. 기존 작업 장부나 `WORK.md`가 있다면 유지하고 플랜에서 연결합니다. 같은 상태표를 다시 만들거나 자동 이관하지 않습니다. 스펙의 요구는 플랜에서 ID와 링크로 참조하고 길게 복제하지 않습니다. 검증 명령, 입력, 실제 관측, 미확인 조건은 해당 플랜이나 기존 장부에 남깁니다.
+각 정보의 원본은 한 곳에 둡니다.
+기존 작업 장부나 `WORK.md`가 있다면 유지하고 플랜에서 연결합니다.
+같은 상태표를 다시 만들거나 자동 이관하지 않습니다.
+스펙의 요구는 플랜에서 ID와 링크로 참조하고 길게 복제하지 않습니다.
+검증 명령, 입력, 실제 관측, 미확인 조건은 별도 작업 보고에 남깁니다. 플랜에는 실행 이력, 결과 표, 작업 계약이나 회고를 덧붙이지 않습니다.
+체크 상태와 해당 작업의 보고서 링크만 갱신합니다.
+검증 실행기가 플랜에 결과 표를 쓰고 있다면 구현 수정이 허용된 작업에서 출력 대상을 실행별 로컬 결과 파일로 바꿉니다. 문서만 요청받았다면 그 제약과 수정 제안을 작업 보고에 남기고 실행기 코드는 바꾸지 않습니다.
+
+작업 보고는 작업 단위로 나눕니다. 한 보고서에 같은 작업의 수정 전후 근거를 연결하되 매 명령의 원문을 복제하지 않습니다. 다른 작업을 시작하면 새 보고서를 만듭니다. 기존 플랜의 과거 이력을 분리하도록 요청받았다면 시점과 내용을 보존해 보고서로 옮기고 양쪽 링크를 확인합니다. 과거 통과를 현재 실행 결과로 바꾸지 않습니다.
 
 ## 작성 절차
 
