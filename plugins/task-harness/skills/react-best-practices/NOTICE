@@ -1,0 +1,30 @@
+React Best Practices — Task Harness adaptation
+Modified 2026-10-30 by Jincy7.
+Upstream author: Vercel Engineering (upstream skill metadata).
+Source: https://github.com/vercel-labs/agent-skills/tree/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices
+Upstream repository declares the MIT license in README.md:
+https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/README.md
+The MIT permission and warranty text is preserved in LICENSE. Its Jincy7
+copyright line applies to Task Harness additions, not authorship of upstream work.
+The fetched upstream skill/repository did not supply a separate copyright notice.
+
+Selection and adaptation:
+- data-fetching.md: async-defer-await, async-parallel, async-dependencies,
+  async-suspense-boundaries, client-swr-dedup; adds cancellation, error/partial
+  result contracts and existing-tool selection.
+- rendering-and-state.md: rerender-derived-state, rerender-derived-state-no-effect, rerender-no-inline-components,
+  rerender-dependencies, rerender-move-effect-to-event, rerender-functional-setstate,
+  rerender-lazy-state-init, rerender-memo, rerender-defer-reads,
+  rerender-transitions, rerender-use-deferred-value, rerender-use-ref-transient-values,
+  js-tosorted-immutable; adds stable keys, draft ownership and measured scope.
+- server-and-bundle.md: server-auth-actions, server-no-shared-module-state,
+  server-cache-react, server-cache-lru, server-serialization,
+  bundle-barrel-imports, bundle-dynamic-imports, bundle-conditional,
+  bundle-defer-third-party; adds permission-aware cache scope and failure handling.
+- testing-and-boundaries.md: rendering-conditional-render,
+  rendering-hydration-no-flicker, rendering-hydration-suppress-warning;
+  adds existing harness UI correctness, accessibility and evidence boundaries.
+
+This is a condensed thematic adaptation, not a complete or verbatim copy of
+all upstream rules. Advanced hooks, micro-optimizations, fixed performance
+claims and version-specific recipes without a current need are omitted.

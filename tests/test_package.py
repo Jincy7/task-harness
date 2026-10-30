@@ -65,10 +65,29 @@ class PackageTests(unittest.TestCase):
         for path in files:
             self.assertFalse(path.is_symlink(), path)
             if path.is_file():
-                if path.name != "LICENSE":
+                if path.name not in {"LICENSE", "NOTICE"}:
                     self.assertIn(path.suffix, {".md", ".yaml", ".json", ".svg"})
                 self.assertNotIn(path.name, {"mcp.json", "hooks.json"})
                 self.assertNotRegex(path.read_text(), r"시험|응시|예선|skhynix|mail\.google\.com")
+
+    def test_third_party_notices_survive_individual_skill_copy(self):
+        for name in PRACTICE_NAMES:
+            with self.subTest(skill=name), tempfile.TemporaryDirectory() as tmp:
+                directory = Path(tmp) / name
+                shutil.copytree(PLUGIN / "skills" / name, directory)
+                notice = (directory / "NOTICE").read_text()
+                license_text = (directory / "LICENSE").read_text()
+                self.assertRegex(notice, r"[Mm]odified \d{4}-\d{2}-\d{2}")
+                self.assertRegex(notice, r"github\.com/.+/(tree|blob)/[0-9a-f]{40}/")
+                if name == "python-best-practices":
+                    self.assertIn("Copyright 2025 Cisco Systems", notice)
+                    self.assertIn("Copyright (c) 2024 wshobson", notice)
+                    self.assertIn("Permission is hereby granted", notice)
+                    self.assertIn("Apache License", license_text)
+                    self.assertIn("Version 2.0", license_text)
+                else:
+                    self.assertIn("Vercel Engineering", notice)
+                    self.assertIn("Permission is hereby granted", license_text)
 
     def test_entrypoint_local_links_resolve(self):
         text = "\n".join((ROOT / name).read_text() for name in ("README.md", "AGENTS.md"))

@@ -14,8 +14,8 @@
 | `$task-understand` | 사람 검증 뒤 한 질문씩 이해 확인, 설명과 예제 및 최종 점검 | 선택한 사례의 설명 확인과 남은 항목 정리 |
 | `$task-docs` | 문서 지도, 스펙, 체크리스트, 작업 보고, ADR, 다이어그램 정비 | 현재 작업의 정보별 원본과 연결 확인 |
 | `$task-agents` | 문서 작성 규칙과 스킬 사용 시점을 담은 룰북 지도 | 기존 규칙 보존, 실제 문서와 스킬 연결 |
-| `$python-best-practices` | Python 입력, 저장, 예외, 자원과 동시성 검토 | 변경 경계에 맞는 구현 또는 검토 근거 |
-| `$react-best-practices` | React 상태, Effect, 폼과 사용자 조작 검토 | 변경한 화면 흐름의 구현 또는 검토 근거 |
+| `$python-best-practices` | Python 구조, 성능, 테스트와 오류 처리 검토 | 변경 경계에 맞는 구현 또는 검토 근거 |
+| `$react-best-practices` | React 요청, 상태, 서버/번들과 UI 검증 | 변경한 화면 흐름의 구현 또는 검토 근거 |
 
 작업 스킬 6개는 명시적으로 호출할 때 사용합니다. Python과 React 스킬은 해당 코드를 작성하거나 검토할 때 자동 선택을 허용하며, 명시적으로도 호출할 수 있습니다. 단계마다 모두 호출할 필요는 없습니다. 확정된 작은 수정은 바로 `$task-build`로 시작할 수 있습니다. 각 스킬은 개별 설치해도 동작합니다.
 
@@ -187,7 +187,7 @@ $task-understand
 
 하네스 자체에는 외부 서비스 실행 코드가 없습니다. Codex의 모델 통신과 대상 프로젝트의 패키지 설치는 별도입니다. 스킬 지침은 실행 환경의 권한이나 격리를 새로 제공하지 않습니다.
 
-`local*` 파일과 `.local/` 실행 자료는 Git에서 제외합니다. 공개 패키지는 `plugins/task-harness/`, 카탈로그는 `.agents/plugins/marketplace.json`입니다. 배포에는 [MIT 라이선스](LICENSE)를 적용합니다.
+`local*` 파일과 `.local/` 실행 자료는 Git에서 제외합니다. 공개 패키지는 `plugins/task-harness/`, 카탈로그는 `.agents/plugins/marketplace.json`입니다. 자체 작성 부분에는 [MIT 라이선스](LICENSE)를 적용합니다. Python 스킬에는 Cisco의 Apache-2.0 자료와 wshobson의 MIT 참조를 포함하며, React 스킬은 Vercel의 MIT 자료를 선별해 사용합니다. 각 스킬의 LICENSE와 NOTICE를 개별 복사 시에도 함께 유지합니다.
 
 ## 검증
 
@@ -197,7 +197,7 @@ $task-understand
 python3 -m unittest discover -s tests -v
 ```
 
-검사 범위는 카탈로그와 매니페스트 연결, 여덟 스킬의 호출 정책, 개별 복사 후 로컬 참조 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 공식 출처 링크는 선택 참고 자료이며 실제 지침은 스킬 안에 포함합니다. 정적 검사만으로 에이전트 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
+검사 범위는 카탈로그와 매니페스트 연결, 여덟 스킬의 호출 정책, 개별 복사 후 로컬 참조와 라이선스 고지 유지, 배포 파일 구성, README의 로컬 링크, SVG의 외부 참조와 실행 요소 부재입니다. 공식 출처 링크는 선택 참고 자료이며 실제 지침은 스킬 안에 포함합니다. 정적 검사만으로 에이전트 판단이나 모든 Codex 버전의 호환성을 보장하지 않습니다.
 
 ### 검증 이력
 
@@ -224,10 +224,15 @@ React 실행과 브라우저 검증, 새 세션에서 기술 스킬의 자동 �
 2026-10-30에 패키지 검사 6개와 스킬 8개의 형식 검사를 통과했습니다. 독립 에이전트의 합성 문답 사례 7개를 검토하고, 문답의 제품 수정 범위를 명확히 한 뒤 설명 전용 및 종료 사례 2개를 재검증했습니다.
 추가 합성 상황 4개에서 규칙 정정, 외부 검사 실패의 근거 부족, 고정 가중치의 불변 조건, stdout 오류 보존 설계를 확인했습니다. 실제 앱 재실행, 실제 사용자 이해 및 모든 환경의 병행 실행을 검증한 결과는 아닙니다.
 
+`0.7.0`은 Python을 Cisco의 진입점과 네 가지 상세 참조 형식으로 보강하고, React는 Vercel의 핵심 지침을 비슷한 분량의 네 문서로 축약합니다. 개별 스킬에 출처, 변경 내역과 라이선스 고지를 포함합니다.
+2026-10-30에 패키지 검사 7개, 스킬 형식 검사 8개, Python 3.10 문법 기준 예제 59개와 TSX 문법 예제 26개를 확인했습니다. 별도 Python 실행 검사 3개에서 잘못된 입력, JSON 오류 경계, 실제 SQLite 저장 및 성공/실패 후 연결 종료를 확인했습니다.
+합성 검토 사례 15개로 지침 적용을 검토하고 누락된 기본 규칙을 보완했습니다. 예제는 프로젝트 코드에 적용할 발췌이며, 외부 패키지 예제 전체의 실행, React UI 실행과 실제 프로젝트 성능 향상을 검증한 결과는 아닙니다.
+
 ## 참고 자료
 
-[Python 스킬 구성 참고](https://github.com/cisco-open/ai-harness-toolkit/tree/main/skills/python-best-practices)의 짧은 진입점과 관심사별 참조 구조를 참고했습니다.
-본문의 지침은 이 하네스에 맞게 새로 작성했으며 해당 저장소의 스킬 원문을 배포물에 복사하지 않았습니다. Python과 React 공식 근거는 각 기술 스킬의 참조 문서에서 연결합니다.
+[Cisco Python 스킬](https://github.com/cisco-open/ai-harness-toolkit/tree/main/skills/python-best-practices)의 진입점과 네 가지 참조 구조 및 예제를 반영합니다. Python 3.10 문법, 재시도와 예외 범위, 자원 정리 및 검증 근거는 하네스 지침에 맞춰 수정했습니다. 출처와 변경 내역은 [Python NOTICE](plugins/task-harness/skills/python-best-practices/NOTICE)에 있습니다.
+
+[Vercel React 스킬](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices)은 요청 처리, 상태/렌더링, 서버/번들, UI 검증의 네 문서로 축약합니다. Python과 비슷한 분량으로 중요한 적용 조건과 예제를 유지하고, 세부 최적화와 고급 패턴은 선별했습니다. 선별 범위와 출처는 [React NOTICE](plugins/task-harness/skills/react-best-practices/NOTICE)에 있습니다. 두 스킬 모두 진입점은 한국어로, 상세 예제 지침은 영어로 제공합니다.
 
 형식 참고: [공식 플러그인 패키징 문서](https://developers.openai.com/plugins/build/plugins), [공식 스킬 문서](https://learn.chatgpt.com/docs/build-skills), [공식 AGENTS.md 지침](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
 실제 지원 범위는 사용 중인 Codex에서 확인합니다.
