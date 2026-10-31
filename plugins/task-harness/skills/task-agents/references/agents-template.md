@@ -36,7 +36,7 @@ Git이 없으면 이 조건만을 이유로 저장소를 만들지 않습니다.
 | 요구 정리와 작업 분해 | 확인한 task-scope 진입점 |
 | 확정된 흐름 구현 | 확인한 task-build 진입점 |
 | 수용 조건과 실제 결과 대조 | 확인한 task-verify 진입점 |
-| 명시 요청한 웨이브별 이해 확인과 최종 점검 | 확인한 task-understand 진입점 |
+| 명시 요청한 통합 흐름 설명과 최종 연습 | 확인한 task-understand 진입점 |
 | 문서 정리와 다이어그램 | 확인한 task-docs 진입점 |
 | 이 지도 정리 | 확인한 task-agents 진입점 |
 | Python 구현 또는 코드 검토 | 확인한 python-best-practices 진입점 |
