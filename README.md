@@ -273,6 +273,10 @@ React 실행과 브라우저 검증, 새 세션에서 기술 스킬의 자동 �
 별도 임시 저장소에서 커밋을 언급하지 않은 수정 요청의 실제 커밋 생성과 worktree 통합 전후 상태를 확인했습니다.
 검증 범위, 근거와 미확인은 [0.8.1 작업 보고](docs/reports/0.8.1.md)에 기록했습니다. 설치본 갱신과 원격 push는 수행하지 않았습니다.
 
+추가로 실제 CLI 세션 두 개에서 회의실 예약 웹서비스를 구현하고 변경했습니다. 중간 커밋 5개와 후속 커밋 2개, 플랜의 단계별 완료 체크와 사용자 지정에 따른 README 체크리스트 이전을 확인했습니다.
+최종 커밋을 별도 폴더에서 재실행해 API 및 기록 테스트 15개와 Chrome 테스트 3개를 통과했고, 독립 HTTP 검사 74개도 통과했습니다.
+기본 체크리스트 위치와 작업 스킬의 명시 호출 정책 전달 한계는 [실제 구현 흐름 검증](docs/reports/0.8.1-e2e.md)에 기록했습니다.
+
 ## 참고 자료
 
 [Cisco Python 스킬](https://github.com/cisco-open/ai-harness-toolkit/tree/main/skills/python-best-practices)의 진입점과 네 가지 참조 구조 및 예제를 반영합니다. Python 3.10 문법, 재시도와 예외 범위, 자원 정리 및 검증 근거는 하네스 지침에 맞춰 수정했습니다. 출처와 변경 내역은 [Python NOTICE](plugins/task-harness/skills/python-best-practices/NOTICE)에 있습니다.
