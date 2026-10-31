@@ -12,6 +12,7 @@ PLUGIN = ROOT / "plugins/task-harness"
 WORKFLOW_NAMES = {"task-scope", "task-build", "task-verify", "task-docs", "task-agents", "task-understand"}
 PRACTICE_NAMES = {"python-best-practices", "react-best-practices"}
 NAMES = WORKFLOW_NAMES | PRACTICE_NAMES
+ENVIRONMENT_REFERENCE = PLUGIN / "skills/task-understand/references/environment-retrospective.md"
 
 
 class PackageTests(unittest.TestCase):
@@ -68,7 +69,11 @@ class PackageTests(unittest.TestCase):
                 if path.name not in {"LICENSE", "NOTICE"}:
                     self.assertIn(path.suffix, {".md", ".yaml", ".json", ".svg"})
                 self.assertNotIn(path.name, {"mcp.json", "hooks.json"})
-                self.assertNotRegex(path.read_text(), r"시험|응시|예선|skhynix|mail\.google\.com")
+                if path != ENVIRONMENT_REFERENCE:
+                    self.assertNotRegex(path.read_text(), r"시험|응시|예선|skhynix|mail\.google\.com")
+                else:
+                    # One user-authorized, opt-in report; not a distribution-wide exemption.
+                    self.assertNotRegex(path.read_text(), r"skhynix|mail\.google\.com")
 
     def test_third_party_notices_survive_individual_skill_copy(self):
         for name in PRACTICE_NAMES:

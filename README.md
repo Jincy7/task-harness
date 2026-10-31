@@ -133,10 +133,13 @@ $task-understand
 기본 흐름은 `구현 중 결정 기록 → 통합 및 사람 검증 → 코드 없는 전체 흐름 설명 → 필요한 후속 질문 하나 → 정리`입니다.
 웨이브별 문답은 사용자가 별도로 요청한 경우에만 진행합니다.
 
-최종 연습을 요청하면 기본 6문항, 각 5분으로 진행합니다. 판단 영역과 문답 규칙은 [task-understand](plugins/task-harness/skills/task-understand/SKILL.md)에서 확인합니다.
+최종 연습을 요청하면 기본 6문항, 각 5분으로 진행합니다. 문항은 현재 저장소의 작업 근거에서 생성하며 여섯 영역에 한 문항씩 할당하지 않습니다. 판단 영역과 문답 규칙은 [task-understand](plugins/task-harness/skills/task-understand/SKILL.md)에서 확인합니다.
 구현은 질문을 구체화하고 답을 대조하는 근거로 사용합니다. 코드 키워드로 주제를 정하지 않습니다.
 사람 검증 대기나 실패를 문답 완료로 덮지 않으며 제품 상태와 설명 확인 상태를 분리합니다.
 확인 중인 화면, 입력과 코드 버전을 유지하고 허용된 독립 작업을 진행합니다. 문답 요지와 남은 확인은 기존 작업 보고에 기록합니다.
+
+동일 환경의 복기를 참고하도록 요청한 경우에는 [실행환경 참고자료](plugins/task-harness/skills/task-understand/references/environment-retrospective.md)를 사용합니다.
+사용자 보고와 추정을 구분하며, 다른 저장소의 일반 질문에 해당 사례의 요구를 자동 적용하지 않습니다.
 
 ## 기록과 작업 방식
 
@@ -179,6 +182,16 @@ $task-understand
 Git 저장소에서는 [커밋 단위 지침](plugins/task-harness/skills/task-build/references/commit-units.md)에 따라 동작이나 수정 목적별로 검증하고 커밋합니다.
 함께 동작해야 하는 코드, 테스트와 문서를 묶고, 무관한 리팩토링이나 포맷 변경은 분리합니다.
 사용자의 커밋 보류 지시를 따르며, 원격 push와 배포는 기존 승인 범위를 따릅니다.
+
+## 판단과 검증 근거
+
+정성적 답변과 사용자가 선택한 정책은 [규칙과 사례](plugins/task-harness/skills/task-scope/references/rules-and-cases.md)로 구분합니다.
+계산 방식, 데이터 소유권과 변경 정책은 [분석과 변경 계약](plugins/task-harness/skills/task-build/references/decision-evidence.md)에 따라 구현 근거를 남깁니다.
+최악 결과, 미처리 대상과 동시 요청은 [행동 검증](plugins/task-harness/skills/task-verify/references/behavior-evidence.md)의 해당 사례로 확인합니다.
+
+중요한 AI 제안의 채택, 수정과 기각은 이해 확인 스킬을 호출하지 않아도 작업 보고에 남깁니다.
+협업 설명이나 지정 파일을 요구받으면 [협업 기록과 산출물 지침](plugins/task-harness/skills/task-docs/references/collaboration-report.md)으로 실제 근거를 연결합니다.
+여러 세션의 쓰기 작업은 [작업 계약](plugins/task-harness/skills/task-build/references/delegation-template.md)에 기준 SHA, 수정 책임과 통합 담당자를 정합니다.
 
 ## 실행 기록부터 시작하는 흐름
 
@@ -252,6 +265,13 @@ React 실행과 브라우저 검증, 새 세션에서 기술 스킬의 자동 �
 스킬 형식 검사는 기본 Python에 PyYAML이 없어 첫 실행이 실패했으며, `uv run --with pyyaml`의 임시 환경에서 8개 모두 통과했습니다.
 문서 링크와 호출 정책, 템플릿 및 예제의 계약을 확인했습니다. 새 세션의 일반 요청에 따른 실제 커밋 생성과 사용자 문답 효과는 미확인입니다.
 이 버전의 플러그인 재설치나 설치 캐시 갱신은 수행하지 않았습니다.
+
+`0.8.1`은 판단 근거, 데이터 변경 계약, 최악 결과 검증과 협업 기록을 보강합니다.
+최종 연습 문항을 저장소의 실제 작업에서 생성하고, 동일 환경 복기는 요청 시에만 읽는 참고자료로 보존합니다.
+2026-10-31에 패키지 검사 7개와 전체 스킬 형식 검사 8개를 통과했습니다.
+독립 합성 요청 5개에서 두 도메인의 문항 생성과 정책 및 검증 판단을 확인했습니다.
+별도 임시 저장소에서 커밋을 언급하지 않은 수정 요청의 실제 커밋 생성과 worktree 통합 전후 상태를 확인했습니다.
+검증 범위, 근거와 미확인은 [0.8.1 작업 보고](docs/reports/0.8.1.md)에 기록했습니다. 설치본 갱신과 원격 push는 수행하지 않았습니다.
 
 ## 참고 자료
 
